@@ -23,9 +23,7 @@ var (
 func main() {
 	key := flag.String("k", "", "pm9 screw crypt key")
 	f := flag.String("f", "", "screwed file")
-	screw := flag.String("screw", PM9SCREW, "screw")
 	flag.Parse()
-	fmt.Printf("%q\n", *screw)
 
 	var err error
 	k2 := *key
@@ -45,7 +43,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	data, err := decrypt(bs, *screw, pm9ScrewMyCryptKey)
+	data, err := decrypt(bs, PM9SCREW, pm9ScrewMyCryptKey)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,6 +55,7 @@ func loadKey() (string, error) {
 	if err != nil {
 		return "", err
 	}
+	bs = bytes.TrimSpace(bs)
 	return string(bs), nil
 }
 
