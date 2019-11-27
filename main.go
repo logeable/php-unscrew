@@ -22,7 +22,7 @@ var (
 
 func main() {
 	key := flag.String("k", "", "pm9 screw crypt key")
-	f := flag.String("f", "", "screwed file")
+	f := flag.String("f", "-", "screwed file, default from stdin")
 	flag.Parse()
 
 	var err error
@@ -39,9 +39,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	bs, err := ioutil.ReadFile(*f)
-	if err != nil {
-		log.Fatal(err)
+	var bs []byte
+	if *f == "-" {
+		bs, err = ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		bs, err = ioutil.ReadFile(*f)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	data, err := decrypt(bs, PM9SCREW, pm9ScrewMyCryptKey)
 	if err != nil {
